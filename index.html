@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Boundary Script Pack — The Circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #edeae1;
+    --card: #ffffff;
+    --ink: #1e1a13;
+    --ink-muted: #7a7060;
+    --ink-light: #b0a898;
+    --gold: #8a6230;
+    --gold-btn: #7d5b2a;
+    --gold-btn-hover: #6a4d23;
+    --border: rgba(0,0,0,0.08);
+    --border-hover: rgba(138,98,48,0.35);
+    --dark-bg: #1c1a13;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
+  header { background: var(--bg); padding: 22px 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 11px; text-decoration: none; color: inherit; }
+  .logo-icon { width: 34px; height: 34px; border: 1.5px solid var(--ink); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
+  .logo-icon::before { content: ''; width: 11px; height: 11px; border: 1.5px solid var(--ink); border-radius: 50%; }
+  .logo-icon::after { content: ''; width: 4px; height: 4px; background: var(--ink); border-radius: 50%; position: absolute; }
+  .logo-name { font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); }
+  .header-badge { font-size: 13px; font-weight: 400; color: var(--ink-muted); border: 1px solid var(--border); padding: 7px 18px; border-radius: 40px; background: var(--card); }
+  .hero { text-align: center; padding: 68px 40px 52px; max-width: 860px; margin: 0 auto; animation: fadeUp 0.7s ease both; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 7vw, 80px); font-weight: 400; line-height: 1.08; color: var(--ink); margin-bottom: 22px; letter-spacing: -0.01em; }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub { font-size: 15px; font-weight: 300; line-height: 1.7; color: var(--ink-muted); max-width: 520px; margin: 0 auto 40px; }
+  .hero-divider { width: 1px; height: 40px; background: var(--border); margin: 0 auto; position: relative; }
+  .hero-divider::after { content: ''; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  main { max-width: 840px; margin: 0 auto; padding: 52px 40px 0; animation: fadeUp 0.7s 0.1s ease both; }
+  .step-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .step-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .scenario-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 48px; }
+  .scenario-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 20px 18px 18px; cursor: pointer; transition: all 0.2s ease; text-align: left; user-select: none; }
+  .scenario-card:hover { border-color: var(--border-hover); box-shadow: 0 4px 16px rgba(0,0,0,0.07); transform: translateY(-1px); }
+  .scenario-card.active { border-color: var(--gold); background: #fdf9f3; box-shadow: 0 4px 20px rgba(138,98,48,0.12); }
+  .card-emoji { font-size: 24px; margin-bottom: 10px; display: block; line-height: 1; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 5px; }
+  .card-sub { font-size: 12px; font-weight: 300; color: var(--ink-muted); line-height: 1.45; }
+  .field-block { margin-bottom: 36px; }
+  .field-note { font-size: 13px; color: var(--ink-muted); font-weight: 300; margin-bottom: 14px; }
+  textarea { width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 18px; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 300; color: var(--ink); resize: vertical; outline: none; line-height: 1.7; transition: border-color 0.2s; min-height: 110px; }
+  textarea:focus { border-color: var(--gold); }
+  textarea::placeholder { color: var(--ink-light); }
+  .tone-row { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 12px; }
+  .tone-pill { padding: 9px 22px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink-muted); font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 400; cursor: pointer; border-radius: 40px; transition: all 0.18s ease; }
+  .tone-pill:hover { border-color: var(--border-hover); color: var(--ink); }
+  .tone-pill.active { border-color: var(--gold); background: #fdf9f3; color: var(--gold-btn); font-weight: 500; }
+  .generate-wrap { margin-top: 36px; padding-bottom: 60px; }
+  .generate-btn { width: 100%; padding: 18px; background: var(--gold-btn); color: #fff; border: none; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.03em; cursor: pointer; border-radius: var(--radius); transition: all 0.2s ease; }
+  .generate-btn:hover { background: var(--gold-btn-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(138,98,48,0.25); }
+  .generate-btn:active { transform: translateY(0); }
+  .generate-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+  .output-section { max-width: 840px; margin: 0 auto; padding: 0 40px 60px; display: none; animation: fadeUp 0.5s ease both; }
+  .output-section.visible { display: block; }
+  .loading-bar { height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%); background-size: 200% 100%; animation: shimmer 1.4s ease infinite; margin-bottom: 28px; opacity: 0; transition: opacity 0.3s; }
+  .loading-bar.active { opacity: 1; }
+  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .output-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); }
+  .copy-btn { padding: 7px 18px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink-muted); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 40px; transition: all 0.18s; }
+  .copy-btn:hover { border-color: var(--border-hover); color: var(--gold); }
+  .copy-btn.copied { border-color: #6b8c5c; color: #5a7a4d; }
+  .output-card { background: var(--card); border: 1.5px solid var(--border); border-left: 3px solid var(--gold); border-radius: var(--radius); padding: 32px 36px; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; line-height: 1.8; color: var(--ink); white-space: pre-wrap; min-height: 80px; }
+  .cta-wrap { padding: 0 40px; max-width: 840px; margin: 0 auto; }
+  .cta-section { background: var(--dark-bg); border-radius: 16px; padding: 52px 56px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .cta-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .cta-headline { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: #f0ebe0; margin-bottom: 8px; line-height: 1.25; }
+  .cta-body { font-size: 14px; font-weight: 300; color: #8a8070; line-height: 1.6; }
+  .cta-btn { padding: 16px 30px; background: var(--gold-btn); color: #fff; border: none; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm); text-decoration: none; white-space: nowrap; transition: all 0.2s; display: inline-block; }
+  .cta-btn:hover { background: var(--gold-btn-hover); }
+  footer { text-align: center; padding: 40px 40px 48px; font-size: 13px; font-weight: 300; color: var(--ink-muted); }
+  footer a { color: var(--ink-muted); }
+  footer a:hover { color: var(--gold); }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @media (max-width: 720px) {
+    header { padding: 18px 20px; }
+    .hero { padding: 48px 20px 36px; }
+    main, .output-section, .cta-wrap { padding-left: 20px; padding-right: 20px; }
+    .scenario-grid { grid-template-columns: 1fr 1fr; }
+    .cta-section { flex-direction: column; text-align: center; padding: 36px 28px; }
+    footer { padding: 32px 20px 40px; }
+  }
+  @media (max-width: 480px) {
+    .scenario-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="https://dannybunny.co/circle" class="logo" target="_blank">
+    <div class="logo-icon"></div>
+    <span class="logo-name">The Circle</span>
+  </a>
+  <div class="header-badge">Member Resource</div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">The Boundary Script Pack</div>
+  <h1>The words you've been <em>looking for</em></h1>
+  <p class="hero-sub">Pick your situation. Tell me what's happening. I'll write you a script you can actually use — so you can say what you need to say without the guilt spiral.</p>
+  <div class="hero-divider"></div>
+</section>
+
+<main>
+  <div class="step-label">Step 1 — What do you need to say no to?</div>
+  <div class="scenario-grid">
+    <div class="scenario-card" data-val="a boss or manager adding extra work without asking" onclick="selectScenario(this)">
+      <span class="card-emoji">💼</span>
+      <div class="card-title">Extra work piling on</div>
+      <div class="card-sub">More tasks, bigger asks, no room</div>
+    </div>
+    <div class="scenario-card" data-val="a friend who takes too much and leaves me feeling depleted" onclick="selectScenario(this)">
+      <span class="card-emoji">👥</span>
+      <div class="card-title">A friend who takes too much</div>
+      <div class="card-sub">The one who leaves you depleted</div>
+    </div>
+    <div class="scenario-card" data-val="a family member around guilt-driven obligation" onclick="selectScenario(this)">
+      <span class="card-emoji">🏡</span>
+      <div class="card-title">Family obligation</div>
+      <div class="card-sub">Guilt-driven, not freely chosen</div>
+    </div>
+    <div class="scenario-card" data-val="a client who keeps asking for more than we agreed to" onclick="selectScenario(this)">
+      <span class="card-emoji">📋</span>
+      <div class="card-title">Client scope creep</div>
+      <div class="card-sub">More than you agreed to give</div>
+    </div>
+    <div class="scenario-card" data-val="someone inviting me to an event I don't want to attend" onclick="selectScenario(this)">
+      <span class="card-emoji">🎉</span>
+      <div class="card-title">Event you don't want to attend</div>
+      <div class="card-sub">Obligated, not excited</div>
+    </div>
+    <div class="scenario-card" data-val="someone asking me for money or financial help" onclick="selectScenario(this)">
+      <span class="card-emoji">💸</span>
+      <div class="card-title">A financial request</div>
+      <div class="card-sub">Saying no to money asks</div>
+    </div>
+    <div class="scenario-card" data-val="someone encroaching on my personal time, rest, or creative space" onclick="selectScenario(this)">
+      <span class="card-emoji">🌿</span>
+      <div class="card-title">Protecting your personal time</div>
+      <div class="card-sub">Rest, space, creative time</div>
+    </div>
+    <div class="scenario-card" data-val="a romantic partner or someone I'm dating around a relationship limit" onclick="selectScenario(this)">
+      <span class="card-emoji">🌀</span>
+      <div class="card-title">A relationship limit</div>
+      <div class="card-sub">Partner, dating, intimacy</div>
+    </div>
+  </div>
+
+  <div class="field-block">
+    <div class="step-label">Step 2 — What's happening?</div>
+    <div class="field-note">Be honest — no judgement here.</div>
+    <textarea id="situation" placeholder="E.g. My mum asks about marriage every single call. I love her but I dread picking up the phone..."></textarea>
+  </div>
+
+  <div class="field-block">
+    <div class="step-label">Step 3 — Tone</div>
+    <div class="field-note">How do you want to land?</div>
+    <div class="tone-row">
+      <button class="tone-pill active" data-val="warm — caring and loving, but still clear" onclick="selectTone(this)">Warm</button>
+      <button class="tone-pill" data-val="clear — grounded and direct without being cold" onclick="selectTone(this)">Clear</button>
+      <button class="tone-pill" data-val="direct and assertive, no over-explaining" onclick="selectTone(this)">Direct</button>
+      <button class="tone-pill" data-val="gentle — soft and easing them in slowly" onclick="selectTone(this)">Gentle</button>
+      <button class="tone-pill" data-val="professional — minimal emotion, clean and formal" onclick="selectTone(this)">Professional</button>
+      <button class="tone-pill" data-val="slightly playful and light, but still boundaried" onclick="selectTone(this)">Playful</button>
+    </div>
+  </div>
+
+  <div class="generate-wrap">
+    <button class="generate-btn" id="genBtn" onclick="generate()">Write My Script →</button>
+  </div>
+</main>
+
+<div class="output-section" id="outputSection">
+  <div class="loading-bar" id="loadingBar"></div>
+  <div class="output-header">
+    <div class="output-label">Your Script</div>
+    <button class="copy-btn" id="copyBtn" onclick="copyScript()">Copy</button>
+  </div>
+  <div class="output-card" id="outputCard"></div>
+</div>
+
+<div class="cta-wrap" style="margin-top: 60px; margin-bottom: 0;">
+  <div class="cta-section">
+    <div>
+      <div class="cta-eyebrow">The Circle by Dan Lim</div>
+      <div class="cta-headline">Boundaries are just the beginning.</div>
+      <div class="cta-body">Practice the full work of personal sovereignty inside The Circle.</div>
+    </div>
+    <a href="https://dannybunny.co/circle" target="_blank" class="cta-btn">Join The Circle →</a>
+  </div>
+</div>
+
+<footer>
+  A tool for members of <a href="https://dannybunny.co/circle" target="_blank">The Circle</a> &nbsp;·&nbsp; Personal sovereignty in practice.
+</footer>
+
+<script>
+  let selectedScenario = '';
+  let selectedTone = 'warm — caring and loving, but still clear';
+  let fullScript = '';
+
+  function selectScenario(el) {
+    document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedScenario = el.dataset.val;
+  }
+
+  function selectTone(btn) {
+    document.querySelectorAll('.tone-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedTone = btn.dataset.val;
+  }
+
+  async function generate() {
+    const situation = document.getElementById('situation').value.trim();
+    if (!selectedScenario) { alert('Please choose a scenario first.'); return; }
+    if (!situation) { alert('Tell me a little about what\'s happening.'); return; }
+
+    const genBtn = document.getElementById('genBtn');
+    const outputSection = document.getElementById('outputSection');
+    const outputCard = document.getElementById('outputCard');
+    const loadingBar = document.getElementById('loadingBar');
+
+    genBtn.disabled = true;
+    genBtn.textContent = 'Writing your script...';
+    outputSection.classList.add('visible');
+    outputCard.textContent = '';
+    loadingBar.classList.add('active');
+    fullScript = '';
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scenario: selectedScenario,
+          situation: situation,
+          tone: selectedTone
+        })
+      });
+
+      if (!response.ok) throw new Error('Something went wrong on the server.');
+      const data = await response.json();
+      fullScript = data.script || '';
+      outputCard.textContent = fullScript;
+
+    } catch (err) {
+      outputCard.textContent = 'Something went wrong. Please try again.';
+      console.error(err);
+    }
+
+    loadingBar.classList.remove('active');
+    genBtn.disabled = false;
+    genBtn.textContent = 'Write Another Script →';
+    outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function copyScript() {
+    if (!fullScript) return;
+    const btn = document.getElementById('copyBtn');
+    try {
+      await navigator.clipboard.writeText(fullScript);
+      btn.textContent = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    } catch { btn.textContent = 'Use Ctrl+C'; }
+  }
+</script>
+</body>
+</html>
